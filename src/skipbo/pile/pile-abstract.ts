@@ -6,7 +6,7 @@ export enum PileRole {
   BUILDING = 1, DISCARDING
 }
 
-export class AbstractPile {
+export abstract class AbstractPile {
   private _cardList: DoublyLinkedList<Card>;
   private _mode: PileRole;
 
@@ -17,11 +17,6 @@ export class AbstractPile {
   }
   
   removeTopCard() {
-    if(this.getMode() === PileRole.BUILDING) {
-      console.log('should fail')
-      assert(false, `You can't remove card from building piles`);
-    }
-    
     return this._cardList.pop();
   }
 
@@ -35,19 +30,10 @@ export class AbstractPile {
     }
   }
 
-  isFull() {
-    if(this.getMode() === PileRole.DISCARDING) {
-      return false;
-    }
-    return this.top === Card.Twelve;
-  }
+  public abstract isFull();
+  public abstract canPlace(candidate: Card):boolean;
   
-  addCard(card){
-    if(this.getMode() === PileRole.BUILDING) {
-      assert(this.isFull() === false, `You can't place card on a full pile`);
-      assert(this.canPlace(card), `You can't place card ${card} on ${this.top}`);
-    }
-
+  public addCard(card: Card) {
     if(card === Card.SkipBo) {
       // Never add SkipBo cards, replace with value it reflects (current card + 1)
       // this makes it much easier to handle the pile
@@ -60,21 +46,6 @@ export class AbstractPile {
   
   getCards() {
     return Array.from(this._cardList.values());
-  }
-
-  canPlace(candidate: Card):boolean {
-    // We can always place a card on discarding
-    if(this.getMode() === PileRole.DISCARDING) {
-      return true;
-    }
-
-    const topCard = this.top;
-    
-    if(candidate === Card.SkipBo) {
-      return true;
-    }
-    
-    return (candidate - topCard) === 1
   }
   
   /**

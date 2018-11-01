@@ -12,4 +12,36 @@ export class BuildingPile extends AbstractPile {
     super(PileRole.BUILDING);
   }
   
+
+  isFull() {
+    if(this.getMode() === PileRole.DISCARDING) {
+      return false;
+    }
+    return this.top === Card.Twelve;
+  }
+
+
+  canPlace(candidate: Card):boolean {
+    const topCard = this.top;
+    
+    if(candidate === Card.SkipBo) {
+      return true;
+    }
+    
+    return (candidate - topCard) === 1
+  }
+
+
+  addCard(card: Card){
+    assert(this.isFull() === false, `You can't place card on a full pile`);
+    assert(this.canPlace(card), `You can't place card ${card} on ${this.top}`);
+
+    super.addCard(card);
+  }
+  
+  removeTopCard() {
+    assert(false, `You can't remove card from building piles`);
+    return super.removeTopCard();
+  }
+  
 }

@@ -29,19 +29,3 @@ export function generateSkipBoCards() {
 
   return deck;
 }
-
-
-export function getSkipBoValue(cardNode: DoublyLinkedListNode<Card>) {
-  if(!cardNode) {
-    return Card.Empty;
-  }
-  
-  if(cardNode.value !== Card.SkipBo) {
-    return cardNode.value + 1;
-  }
-
-  if(cardNode.value !== Card.SkipBo) {
-    return getSkipBoValue(cardNode.prev);
-  }
-}
-
