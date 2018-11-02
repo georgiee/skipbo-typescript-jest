@@ -59,5 +59,15 @@ export abstract class AbstractPile {
     const card = this._cardList.tail.value;
     return this._cardList.tail.value;
   }
+
+  get size(): number {
+    return this._cardList.size();
+  }
   
+  clear(): Card[] {
+    const cards = this.getCards();
+    this._cardList.reset();
+    
+    return cards;
+  }
 }

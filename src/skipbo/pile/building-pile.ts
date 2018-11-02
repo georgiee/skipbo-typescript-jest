@@ -43,5 +43,4 @@ export class BuildingPile extends AbstractPile {
     assert(false, `You can't remove card from building piles`);
     return super.removeTopCard();
   }
-  
 }

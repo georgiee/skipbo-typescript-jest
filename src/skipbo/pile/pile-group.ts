@@ -57,4 +57,18 @@ export class PileGroup {
     return transposed;
   }
 
+  cleanup() {
+    // remove all completed building piles
+    let cards: Card[] = [];
+
+    this._piles.forEach(pile => {
+      if(pile.isFull()) {
+        cards.push(...pile.clear());
+      }
+    });
+
+    logger.info('cleaned up the following cards', cards);
+
+    return cards;
+  }
 }

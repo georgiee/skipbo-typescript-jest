@@ -19,4 +19,8 @@ export class DiscardPile extends AbstractPile {
     return true;
   }
   
+  clear(): Card[] {
+    throw new Error("You can't clear a discar pile");
+  }
+  
 }

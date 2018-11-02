@@ -36,4 +36,10 @@ describe("Discard Pile", () => {
     expect(pile.top).toBe(Card.Three);
   })
   
+  test("Can't be cleared", () => {
+    expect(() => {
+      pile.clear()
+    }).toThrowError("You can't clear a discar pile");
+  })
+  
 });

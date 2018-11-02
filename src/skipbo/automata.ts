@@ -42,6 +42,8 @@ function singleRun(player: Player) {
   const game:Game = player.getGame();
   
   logger.group(`-- Run partial turn`);
+  logger.info(game.buildingGroup.display());
+
   logger.info(`Current Stock Card: `, player.currentStockCard)
   logger.info(`Current Hand: `, player.getHandCards());
   
@@ -52,23 +54,31 @@ function singleRun(player: Player) {
     cardPlayed = tryHandCard(player);
   }
 
+  logger.info(game.buildingGroup.display());
+
   logger.groupEnd();
   return cardPlayed;
 }
 
 export function playTurn(player: Player) {
-  const game: Game = player.getGame();  
+  const game: Game = player.getGame();
+  
   logger.group(`Playing Turn for ${player}`);
-  logger.info(game.buildingGroup.display());
 
   player.fillHand();
   
   while(singleRun(player)) {
+    //cleanup after each step so we can remove filled building block
+    game.cleanup();
     // logger.info('Placed some card, continue turn');
   }
 
   player.discardHandCard();
-  logger.info(game.buildingGroup.display());
   
   logger.groupEnd();
+
+
+  
+  logger.info(`Remaining Deck Cards: `, game.getDeckCards().length);
+  logger.info(game.buildingGroup.display());
 }

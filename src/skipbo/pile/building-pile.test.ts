@@ -96,6 +96,16 @@ describe("Building Pile", () => {
       pile.add(Card.SkipBo);
     }).toThrowError("You can't place card on a full pile");
   })
+
+
   
-  
+  test("Can be cleared", () => {
+    pile.add(Card.One);
+    pile.add(Card.Two);
+    
+    const cards = pile.clear();
+    
+    expect(cards).toEqual(expect.arrayContaining([Card.One, Card.Two]));
+    expect(pile.size).toBe(0);
+  })
 })

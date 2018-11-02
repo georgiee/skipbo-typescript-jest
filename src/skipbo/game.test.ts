@@ -44,6 +44,7 @@ test("throws error if drawing less than one card ", () => {
   }).toThrowError("Can't draw less than one card");
 })
 
-test("nextTurn moves any completed building pile into the completed decl", () => {
-  
+test("nextTurn returns a player", () => {
+  const player = game.nextTurn();
+  expect(player).toBeInstanceOf(Player);
 })

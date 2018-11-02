@@ -1,5 +1,5 @@
 import { BuildingPile } from "./pile/building-pile";
-import { DoublyLinkedList } from "../core/doubly-linked-list";
+import { DoublyLinkedList, DoublyLinkedListNode } from "../core/doubly-linked-list";
 import { Card, generateSkipBoCards } from "./card";
 import { shuffle, assert } from "../utils";
 import { Player } from "./player";
@@ -11,14 +11,16 @@ export const STOCK_CARD_COUNT = 30;
 // create and shuffle the initial deck
 export class Game {
   deck: DoublyLinkedList<Card> = new DoublyLinkedList();
+  // hold all completed building cards
+  completedDeck: Card[] = [];
   buildingGroup: PileGroup = new PileGroup();
   buildingPileOne: BuildingPile = new BuildingPile();
   buildingPileTwo: BuildingPile = new BuildingPile();
   buildingPileThree: BuildingPile = new BuildingPile();
   buildingPileFour: BuildingPile = new BuildingPile();
   
-
-  _players: Player[] = [];
+  _currentPlayer: DoublyLinkedListNode<Player>;
+  _players: DoublyLinkedList<Player> = new DoublyLinkedList();
 
   constructor(deck:Card[] = []) {
     this.buildingGroup.add(this.buildingPileOne);
@@ -58,13 +60,15 @@ export class Game {
   }
 
   dealStockCards() {
+    const players = Array.from(this._players.values());
+    
     for(let i = 0; i < STOCK_CARD_COUNT; i++) {
-      this._players.forEach(player => player.addStockCard(this.drawDeckCard()));
+      players.forEach(player => player.addStockCard(this.drawDeckCard()));
     }
     
     logger.group("Dealing stock cards to players");
 
-    this._players.forEach(player => {
+    players.forEach(player => {
       logger.info(`${player} received ${player.getStockCards().length} stock cards`);
     })
     logger.groupEnd();
@@ -72,9 +76,27 @@ export class Game {
 
   createPlayer(name: string) {
     const player = new Player(name, this);
-    this._players.push(player);
+    this._players.add(player);
     logger.info(`New Player '${player}' Added`);
 
     return player;
+  }
+
+  cleanup() {
+    const cards = this.buildingGroup.cleanup();
+    this.completedDeck.push(...cards);
+  }
+  get currentPlayer() {
+    return this._currentPlayer.value;
+  }
+  
+  nextTurn() {
+    if(!this._currentPlayer) {
+      this._currentPlayer = this._players.head;
+    }else {
+      this._currentPlayer = this._currentPlayer.next;
+    }
+
+    return this.currentPlayer;
   }
 }

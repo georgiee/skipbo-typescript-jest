@@ -18,7 +18,15 @@ game.dealStockCards();
 
 // Start Game
 
-// game.nextTurn();
+game.cleanup();
+playTurn(player1);
+playTurn(player2);
+playTurn(player1);
+playTurn(player2);
+playTurn(player1);
+playTurn(player2);
+playTurn(player1);
+playTurn(player2);
 playTurn(player1);
 playTurn(player2);
 playTurn(player1);
