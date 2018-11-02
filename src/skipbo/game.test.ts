@@ -44,29 +44,6 @@ test("throws error if drawing less than one card ", () => {
   }).toThrowError("Can't draw less than one card");
 })
 
-test.skip("one player turn", () => {
-  const player1: Player = game.createPlayer("Player1");
-  const player2: Player = game.createPlayer("Player1");
-  game.dealStockCards();
+test("nextTurn moves any completed building pile into the completed decl", () => {
   
-  let playerTurn = false;
-
-  do {
-    if(game.buildingGroup.canPlace(player1.currentStockCard)) {
-      console.log('playong stock card');
-      game.buildingGroup.autoPlace(player1.drawStockCard());
-      playerTurn = true;
-    } else {
-      const hand = player1.getHandCards();
-      
-      if(game.buildingGroup.canPlace(...hand)) {
-        // const candidates = game.buildingGroup.getBvuildingCards(hand);
-        game.buildingGroup.autoPlace(candidates[0])
-        console.log('playing hand card');
-        playerTurn = true;
-      }
-    }
-  } while(playerTurn)
-  
-
 })

@@ -90,3 +90,14 @@ test("get stock card", () => {
   player.addStockCard(Card.One, Card.Two, Card.Three);
   expect(player.currentStockCard).toBe(Card.Three);
 })
+
+test("can discard a hand card", () => {
+  player.fillHand();
+
+  const handCardsBefore = player.getHandCards();
+  player.discardHandCard();
+  
+  const handCardsAfter = player.getHandCards();
+  expect(handCardsBefore.length - 1).toBe(handCardsAfter.length);
+})
+

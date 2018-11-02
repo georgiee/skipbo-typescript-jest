@@ -1,0 +1,24 @@
+let enabled = false;
+
+const enable = () => {
+  enabled = true;
+}
+const info = (...messages) => {
+  if(enabled) {
+    console.info(...messages);
+  }
+}
+
+const group = (...messages) => {
+  if(enabled) {
+    console.groupCollapsed(...messages);
+  }
+}
+
+const groupEnd = (...messages) => {
+  if(enabled) {
+    console.groupEnd();
+  }
+}
+
+export const logger = {enable, info, group, groupEnd};

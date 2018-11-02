@@ -4,6 +4,7 @@ import { Card, generateSkipBoCards } from "./card";
 import { shuffle, assert } from "../utils";
 import { Player } from "./player";
 import { PileGroup } from "./pile/pile-group";
+import { logger } from "./logger";
 
 export const STOCK_CARD_COUNT = 30;
 
@@ -57,15 +58,22 @@ export class Game {
   }
 
   dealStockCards() {
-
     for(let i = 0; i < STOCK_CARD_COUNT; i++) {
       this._players.forEach(player => player.addStockCard(this.drawDeckCard()));
     }
+    
+    logger.group("Dealing stock cards to players");
+
+    this._players.forEach(player => {
+      logger.info(`${player} received ${player.getStockCards().length} stock cards`);
+    })
+    logger.groupEnd();
   }
 
   createPlayer(name: string) {
     const player = new Player(name, this);
     this._players.push(player);
+    logger.info(`New Player '${player}' Added`);
 
     return player;
   }

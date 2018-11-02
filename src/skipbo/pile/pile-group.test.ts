@@ -47,3 +47,19 @@ test("can auto place wild card" , () => {
   expect(pile1.top).toBe(Card.Four);
   expect(pile2.top).toBe(Card.Empty);
 })
+
+test.only("can output an ascii representatipn of the whole group" , () => {
+  group.autoPlace(Card.One);
+  group.autoPlace(Card.One);
+  group.autoPlace(Card.Two);
+  group.autoPlace(Card.Three);
+
+  const output = group.display();
+  const ascii = `
+┌────┐'
+│1││1│
+│2│
+│2│
+`;
+  expect(output).toBe(ascii);
+})

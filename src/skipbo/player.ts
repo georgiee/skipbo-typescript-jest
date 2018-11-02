@@ -3,6 +3,8 @@ import { DiscardPile } from "./pile/discard-pile";
 import { DoublyLinkedList } from "../core/doubly-linked-list";
 import { Game } from "./game";
 import { assert } from "../utils";
+import { logger } from "./logger";
+import { PileGroup } from "./pile/pile-group";
 
 export const HAND_CARD_COUNT = 5;
 
@@ -10,16 +12,30 @@ export class Player {
   stockPile:DoublyLinkedList<Card> = new DoublyLinkedList();
   hand: Card[];
 
-  discardPileOne: DiscardPile;
-  discardPileTwo: DiscardPile;
-  discardPileThree: DiscardPile;
-  discardPileFour: DiscardPile;
-  
+  discardPileOne: DiscardPile = new DiscardPile();
+  discardPileTwo: DiscardPile = new DiscardPile();
+  discardPileThree: DiscardPile = new DiscardPile();
+  discardPileFour: DiscardPile = new DiscardPile();
+  discardGroup: PileGroup = new PileGroup();
+
   constructor(
     private _name: string,
     private _game: Game
   ){
+    this.discardGroup.add(this.discardPileOne);
+    this.discardGroup.add(this.discardPileOne);
+    this.discardGroup.add(this.discardPileOne);
+    this.discardGroup.add(this.discardPileOne);
+
     this.reset();
+  }
+  
+  getGame() {
+    return this._game;
+  }
+
+  toString() {
+    return this.getName();
   }
   
   addStockCard(...cards: Card[]) {
@@ -29,6 +45,7 @@ export class Player {
   }
   
   drawStockCard() {
+    logger.info('Drawing Stock Card');
     return this.stockPile.pop();
   }
   
@@ -45,7 +62,9 @@ export class Player {
   }
   
   fillHand() {
-    const delta = HAND_CARD_COUNT - this.hand.length 
+    const delta = HAND_CARD_COUNT - this.hand.length;
+    logger.info(`Drawing ${delta} cards`);
+
     const cards = this._game.drawDeckCards(delta);
     
     this.hand.push(...cards);
@@ -70,10 +89,11 @@ export class Player {
   reset() {
     this.stockPile = new DoublyLinkedList();
     this.hand = [];
+  }
 
-    this.discardPileOne = new DiscardPile();
-    this.discardPileTwo = new DiscardPile();
-    this.discardPileThree = new DiscardPile();
-    this.discardPileFour = new DiscardPile();
+  discardHandCard() {
+    // draw first hand card
+    const card: Card = this.drawHandCard(this.hand[0]);
+    this.discardGroup.autoPlace(card);
   }
 }

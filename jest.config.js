@@ -13,6 +13,5 @@ module.exports = {
     "jsx",
     "json",
     "node"
-  ],
-  "testPathIgnorePatterns": ["<rootDir>/src/skipbo-legacy/", "<rootDir>/node_modules/"]
+  ]
 }
