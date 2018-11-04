@@ -6,6 +6,10 @@ let group: PileGroup;
 let pile1: BuildingPile;
 let pile2: BuildingPile;
 
+// create an array of cards from 1 - 12
+const createFullPile = () => Array.from(Array(12))
+  .map((value, index) => index + 1)
+
 beforeEach(() => {
   group = new PileGroup();
   group.add(pile1 = new BuildingPile())
@@ -48,18 +52,44 @@ test("can auto place wild card" , () => {
   expect(pile2.top).toBe(Card.Empty);
 })
 
-test.skip("can output an ascii representatipn of the whole group" , () => {
-  group.autoPlace(Card.One);
-  group.autoPlace(Card.One);
-  group.autoPlace(Card.Two);
-  group.autoPlace(Card.Three);
+test("can auto place multiple cars" , () => {
+  group.autoPlaceCards(Card.One, Card.SkipBo, Card.SkipBo, Card.SkipBo);
 
-  const output = group.display();
-  const ascii = `
-┌────┐'
-│1││1│
-│2│
-│2│
-`;
-  expect(output).toBe(ascii);
+  expect(pile1.top).toBe(Card.Four);
+  expect(pile2.top).toBe(Card.Empty);
+})
+
+test("clears a pile without touching the others" , () => {
+  const fullSet = createFullPile();
+  group.autoPlaceCards(Card.One);
+  group.autoPlaceCards(Card.Two);
+  group.autoPlaceCards(Card.Three);
+  group.autoPlaceCards(Card.Four);
+  group.autoPlaceCards(...fullSet);
+
+  expect(pile1.top).toBe(Card.Twelve);
+
+  group.cleanup();
+  expect(pile1.top).toBe(Card.Empty);
+  expect(pile2.top).toBe(Card.Four);
+})
+
+test("display card as ascii" , () => {
+  const fullSet = createFullPile();
+  group.autoPlaceCards(Card.One);
+  group.autoPlaceCards(...fullSet);
+  expect(group.display()).toBe(`1|1
+2|░
+3|░
+4|░
+5|░
+6|░
+7|░
+8|░
+9|░
+10|░
+11|░
+12|░`);
+
+  expect(pile1.top).toBe(Card.Twelve);
 })

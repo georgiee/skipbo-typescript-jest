@@ -41,8 +41,19 @@ export class Game {
     return Array.from(this.deck.values());
   }
 
+  resetDeck() {
+    const allCards = this.completedDeck.concat(...this.deck.values());
+    this.deck.fromArray(shuffle(allCards));
+  }
+  
+  canDraw(count: number): boolean {
+    return count <= this.deck.size();
+  }
+  
   drawDeckCards(count: number):Card[] {
     assert(count > 0, "Can't draw less than one card");
+    assert(count <= this.deck.size(), `Deck not big enough (${this.deck.size()}), can\'t draw (${count}) card`);
+    
     let cards = [];
 
     while(cards.length < count) {
@@ -61,7 +72,7 @@ export class Game {
 
   dealStockCards() {
     const players = Array.from(this._players.values());
-    
+
     for(let i = 0; i < STOCK_CARD_COUNT; i++) {
       players.forEach(player => player.addStockCard(this.drawDeckCard()));
     }
@@ -84,17 +95,27 @@ export class Game {
 
   cleanup() {
     const cards = this.buildingGroup.cleanup();
+
+    if(cards.length > 0) {
+      logger.info('Cleaned up piles');
+    }
+
     this.completedDeck.push(...cards);
   }
+  
   get currentPlayer() {
     return this._currentPlayer.value;
   }
   
-  nextTurn() {
+  nextPlayer() {
     if(!this._currentPlayer) {
       this._currentPlayer = this._players.head;
     }else {
-      this._currentPlayer = this._currentPlayer.next;
+      if(this._currentPlayer.next) {
+        this._currentPlayer = this._currentPlayer.next;
+      } else{
+        this._currentPlayer = this._players.head;
+      }
     }
 
     return this.currentPlayer;

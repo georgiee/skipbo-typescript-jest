@@ -1,4 +1,4 @@
-import { playTurn } from "./skipbo/automata";
+import { Automata } from "./skipbo/automata";
 import { Game } from "./skipbo/game";
 import { logger } from "./skipbo/logger";
 import { testdeck } from "./skipbo/testdeck";
@@ -16,21 +16,9 @@ const player2 = game.createPlayer("Player 2");
 // deal stock cards to every player
 game.dealStockCards();
 
+const automata = new Automata(game, [player1, player2]);
 // Start Game
 
-game.cleanup();
-playTurn(player1);
-playTurn(player2);
-playTurn(player1);
-playTurn(player2);
-playTurn(player1);
-playTurn(player2);
-playTurn(player1);
-playTurn(player2);
-playTurn(player1);
-playTurn(player2);
-playTurn(player1);
-playTurn(player2);
-playTurn(player1);
-playTurn(player2);
-playTurn(player1);
+for(let i = 0; i< 100; i++) {
+  automata.playTurn();
+}

@@ -96,8 +96,6 @@ describe("Building Pile", () => {
       pile.add(Card.SkipBo);
     }).toThrowError("You can't place card on a full pile");
   })
-
-
   
   test("Can be cleared", () => {
     pile.add(Card.One);

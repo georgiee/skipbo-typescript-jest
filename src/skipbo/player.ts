@@ -61,12 +61,20 @@ export class Player {
     return this._name;
   }
   
+  handIsEmpty() {
+    return this.hand.length === 0;
+  }
+
   fillHand() {
     const delta = HAND_CARD_COUNT - this.hand.length;
     logger.info(`Drawing ${delta} cards`);
-
-    const cards = this._game.drawDeckCards(delta);
     
+    if(!this._game.canDraw(delta)) {
+      // shuffle completed decks back in
+      this._game.resetDeck();
+    }
+    
+    const cards = this._game.drawDeckCards(delta);
     this.hand.push(...cards);
   }
 
@@ -95,5 +103,7 @@ export class Player {
     // draw first hand card
     const card: Card = this.drawHandCard(this.hand[0]);
     this.discardGroup.autoPlace(card);
+
+    return card;
   }
 }

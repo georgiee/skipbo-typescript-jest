@@ -39,22 +39,37 @@ export class PileGroup {
     return firstPile;
   }
 
+  autoPlaceCards(...cards: Card[]) {
+    while(cards.length) {
+      this.autoPlace(cards.shift());
+    }
+  }
+
   display() {
-    const transpose = m => m[0].map((x,i) => m.map(x => {
-      return (x[i] === undefined) ? '░' : x[i];
-    }))
     
     let allCards = this._piles.map(pile => {
       return pile.getCards();
     })
-    
-    if( allCards[0].length === 0 ) {
-      allCards[0]= <any>['░'];
-    }
+
+    // calculate heighest stack 
+    const maxStackSize = allCards.reduce(
+        (maxStackSize: number, item: Card[]) => Math.max(maxStackSize, item.length), 0);
+
+    const transpose = m => Array.from(Array(maxStackSize)).map((x,i) => m.map(x => {
+      return (x[i] === undefined) ? '░' : x[i];
+    }))
+
+
     let transposed = transpose(allCards);
     transposed = transposed.map(item => item.join('|'));
-    transposed = transposed.join('\n');
-    return transposed;
+
+    return transposed.join('\n');
+  }
+
+  print(name) {
+    console.group(name);
+    console.info(this.display());
+    console.groupEnd();
   }
 
   cleanup() {
@@ -66,8 +81,6 @@ export class PileGroup {
         cards.push(...pile.clear());
       }
     });
-
-    logger.info('cleaned up the following cards', cards);
 
     return cards;
   }
