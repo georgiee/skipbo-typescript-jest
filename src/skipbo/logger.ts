@@ -11,6 +11,12 @@ const info = (...messages) => {
 
 const group = (...messages) => {
   if(enabled) {
+    console.group(...messages);
+  }
+}
+
+const groupCollapsed = (...messages) => {
+  if(enabled) {
     console.groupCollapsed(...messages);
   }
 }
@@ -21,4 +27,4 @@ const groupEnd = (...messages) => {
   }
 }
 
-export const logger = {enable, info, group, groupEnd};
+export const logger = {enable, info, groupCollapsed, group, groupEnd};

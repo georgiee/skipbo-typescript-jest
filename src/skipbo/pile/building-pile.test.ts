@@ -25,7 +25,7 @@ describe("Building Pile", () => {
     pile.add(Card.One, Card.Two, Card.Three);
 
     expect(() => {
-      pile.removeTopCard();
+      pile.drawCard(Card.Three);
     }).toThrowError("You can't remove card from building piles");
   })
   

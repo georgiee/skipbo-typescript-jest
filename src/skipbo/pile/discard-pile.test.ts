@@ -27,13 +27,22 @@ describe("Discard Pile", () => {
     expect(pile.top).toBe(Card.Four);
   })
   
-  test('can remove the top card', () => {
+  test('can draw the top card', () => {
     pile.add(Card.Twelve, Card.Two, Card.SkipBo, Card.Four);
 
-    const card = pile.removeTopCard();
+    const card = pile.drawCard(Card.Four);
     
     expect(card).toBe(Card.Four);
     expect(pile.top).toBe(Card.Three);
+  })
+  
+  
+  test('can\'t draw any other card than the top one', () => {
+    pile.add(Card.Twelve, Card.Two, Card.SkipBo, Card.Four);
+
+    expect(() => {
+      pile.drawCard(Card.Two);
+    }).toThrowError("Can't draw card 2");
   })
   
   test("Can't be cleared", () => {

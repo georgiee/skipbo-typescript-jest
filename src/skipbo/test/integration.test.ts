@@ -1,6 +1,6 @@
 import { Player } from "../player";
 import { Game } from "../game";
-import { getFullTestDeck } from "./testdeck";
+import { getFullTestDeck, getStockCardsPlayer1 } from "./testdeck";
 
 let game: Game;
 let player1: Player;
@@ -15,16 +15,20 @@ describe("normal game", () => {
     player2 = game.createPlayer("Player 2");
   })
 
-  test("give stock cards all players", () => {
+  test("give 30 stock cards to each player", () => {
     game.dealStockCards();
     
     expect(player1.getStockCards()).toHaveLength(30);
     expect(player2.getStockCards()).toHaveLength(30);
   })
   
-  test("stock cards all players", () => {
+  test("given stock cards are interleaved", () => {
     game.dealStockCards();
-    expect(player1.getStockCards()).toHaveLength(30);
-    expect(player2.getStockCards()).toHaveLength(30);
+
+    const stockCards1 = player1.getStockCards();
+    // compare original array of expected testcard (from test factory) with given cards.
+    // If it's matching we know it's interleaved as the testdeck was prepared with interleaved card values
+    // so we know the expected stock cards now
+    expect(stockCards1).toEqual(expect.arrayContaining(getStockCardsPlayer1()));
   })
 })

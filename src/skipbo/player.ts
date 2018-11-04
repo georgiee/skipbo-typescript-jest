@@ -102,4 +102,8 @@ export class Player {
 
     return card;
   }
+
+  get complete() {
+    return this.stockPile.size() === 0;
+  }
 }

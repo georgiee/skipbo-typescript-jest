@@ -7,14 +7,14 @@ let player1: Player;
 let player2: Player;
 let defaultGame: Game
 
-const createPlayer = (name, game = null) => new Player(name, game || defaultGame);
+const createPlayer = (name, game = null) => {
+  return new Player(name, game)
+}
 
 beforeEach(() => {
   defaultGame = new Game(getFullTestDeck());
-  player1 = createPlayer("Player 1");
-  player1 = createPlayer("Player 2");
-
-  defaultGame.dealStockCards();
+  player1 = createPlayer("Player 1", defaultGame);
+  player2 = createPlayer("Player 2", defaultGame);
 })
 
 test("can be named", () => {
@@ -80,7 +80,6 @@ test("remove card from hand", () => {
 test("get stock cards", () => {
   player1.addStockCard(Card.One, Card.Two, Card.Three);
   const stockCards = player1.getStockCards();
-
   expect(stockCards).toHaveLength(3);
 })
 
@@ -89,8 +88,6 @@ test("draw stock card", () => {
   player1.addStockCard(Card.Twelve, Card.Eleven, Card.Ten);
 
   const card = player1.drawStockCard();
-  const stockCards = player1.getStockCards();
-
   expect(card).toBe(Card.Ten);
 })
 
@@ -108,5 +105,16 @@ test("can discard a hand card", () => {
   
   const handCardsAfter = player1.getHandCards();
   expect(handCardsBefore.length - 1).toBe(handCardsAfter.length);
+})
+
+test("is complete when no stock cars are left", () => {
+  player1.addStockCard(Card.Twelve, Card.Eleven, Card.Ten);
+  expect(player1.complete).toBeFalsy();
+})
+
+test("is complete when no stock cards are left", () => {
+  const player = createPlayer("Test Player");
+
+  expect(player.complete).toBeTruthy();
 })
 

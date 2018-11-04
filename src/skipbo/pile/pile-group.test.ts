@@ -48,15 +48,15 @@ test("can auto place wild card" , () => {
   group.autoPlace(Card.SkipBo);
   group.autoPlace(Card.SkipBo);
 
-  expect(pile1.top).toBe(Card.Four);
-  expect(pile2.top).toBe(Card.Empty);
+  expect(pile1.top).toBe(Card.Two);
+  expect(pile2.top).toBe(Card.Two);
 })
 
 test("can auto place multiple cars" , () => {
   group.autoPlaceCards(Card.One, Card.SkipBo, Card.SkipBo, Card.SkipBo);
-
-  expect(pile1.top).toBe(Card.Four);
-  expect(pile2.top).toBe(Card.Empty);
+  
+  expect(pile1.top).toBe(Card.Two);
+  expect(pile2.top).toBe(Card.Two);
 })
 
 test("clears a pile without touching the others" , () => {
@@ -73,6 +73,18 @@ test("clears a pile without touching the others" , () => {
   expect(pile1.top).toBe(Card.Empty);
   expect(pile2.top).toBe(Card.Four);
 })
+
+test("give top cards from all piles", () => {
+
+  group.autoPlaceCards(Card.One);
+  group.autoPlaceCards(Card.Two);
+  group.autoPlaceCards(Card.Three);
+  group.autoPlaceCards(Card.Four);
+  group.autoPlaceCards(Card.One);
+  group.autoPlaceCards(Card.Two);
+  
+  expect(group.getTopCards()).toEqual(expect.arrayContaining([Card.Four, Card.Two]));
+});
 
 test("display card as ascii" , () => {
   const fullSet = createFullPile();

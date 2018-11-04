@@ -17,6 +17,7 @@ export class Game {
   
   _currentPlayer: DoublyLinkedListNode<Player>;
   _players: DoublyLinkedList<Player> = new DoublyLinkedList();
+  _turnCounter:number = 0;
 
   constructor(deck:Card[] = []) {
     this.buildingGroup.add(new BuildingPile());
@@ -103,6 +104,10 @@ export class Game {
     return this._currentPlayer.value;
   }
   
+  getPlayers() {
+    return Array.from(this._players.values());
+  }
+
   nextPlayer() {
     if(!this._currentPlayer) {
       this._currentPlayer = this._players.head;
@@ -113,7 +118,11 @@ export class Game {
         this._currentPlayer = this._players.head;
       }
     }
-
+    this._turnCounter ++;
     return this.currentPlayer;
+  }
+
+  get turnId() {
+    return this._turnCounter;
   }
 }

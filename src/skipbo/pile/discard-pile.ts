@@ -14,6 +14,10 @@ export class DiscardPile extends AbstractPile {
     return this.top === Card.Twelve;
   }
 
+  canDraw(card: Card) {
+    return this.top === card;
+  }
+
   canPlace(candidate: Card):boolean {
     // We can always place a card on discarding
     return true;
@@ -22,5 +26,4 @@ export class DiscardPile extends AbstractPile {
   clear(): Card[] {
     throw new Error("You can't clear a discar pile");
   }
-  
 }

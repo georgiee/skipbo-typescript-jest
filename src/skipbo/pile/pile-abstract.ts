@@ -16,7 +16,10 @@ export abstract class AbstractPile {
     this._cardList = new DoublyLinkedList([]);
   }
   
-  removeTopCard() {
+  public abstract canDraw(card: Card);
+
+  drawCard(card: Card):Card {
+    assert(this.canDraw(card), `Can't draw card ${card}`)
     return this._cardList.pop();
   }
 

@@ -20,6 +20,9 @@ export class BuildingPile extends AbstractPile {
     return this.top === Card.Twelve;
   }
 
+  canDraw(card: Card) {
+    return false;
+  }
 
   canPlace(candidate: Card):boolean {
     const topCard = this.top;
@@ -39,8 +42,8 @@ export class BuildingPile extends AbstractPile {
     super.addCard(card);
   }
   
-  removeTopCard() {
+  drawCard(card: Card) {
     assert(false, `You can't remove card from building piles`);
-    return super.removeTopCard();
+    return null;
   }
 }
