@@ -1,13 +1,11 @@
 import { Automata } from "./skipbo/automata";
 import { Game } from "./skipbo/game";
 import { logger } from "./skipbo/logger";
-import { testdeck } from "./skipbo/testdeck";
+import { getFullTestDeck } from "./skipbo/test/testdeck";
 
 logger.enable();
 
-const game = new Game(testdeck);
-// game.restart();
-// console.log(game.getDeckCards());
+const game = new Game(getFullTestDeck());
 
 //create two players
 const player1 = game.createPlayer("Player 1");
@@ -20,5 +18,5 @@ const automata = new Automata(game, [player1, player2]);
 // Start Game
 
 for(let i = 0; i< 100; i++) {
-  automata.playTurn();
+  // automata.playTurn();
 }

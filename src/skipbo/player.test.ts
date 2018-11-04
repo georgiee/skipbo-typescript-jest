@@ -1,7 +1,7 @@
 import { Player, HAND_CARD_COUNT } from "./player";
 import { Game } from "./game";
 import { Card } from "./card";
-import { testdeck } from "./testdeck";
+import { getFullTestDeck } from "./test/testdeck";
 
 let player1: Player;
 let player2: Player;
@@ -10,7 +10,7 @@ let defaultGame: Game
 const createPlayer = (name, game = null) => new Player(name, game || defaultGame);
 
 beforeEach(() => {
-  defaultGame = new Game(testdeck);
+  defaultGame = new Game(getFullTestDeck());
   player1 = createPlayer("Player 1");
   player1 = createPlayer("Player 2");
 

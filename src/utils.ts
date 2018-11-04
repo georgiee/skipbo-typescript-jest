@@ -1,3 +1,15 @@
+export function interleaveArrays(a:any[], b:any[]) {
+  assert(a.length === b.length, "Can only interleave arrays with same length");
+
+  let result = [];
+
+  for(let i = 0; i < a.length; i++) {
+    result.push(a[i], b[i]);
+  }
+  
+  return result;
+}
+
 // Extract Keys and Values from a TS enum
 export function getEnumValuesAndKeys(ENUM: any){
   const keys = Object.keys(ENUM)

@@ -12,20 +12,16 @@ export class Player {
   stockPile:DoublyLinkedList<Card> = new DoublyLinkedList();
   hand: Card[];
 
-  discardPileOne: DiscardPile = new DiscardPile();
-  discardPileTwo: DiscardPile = new DiscardPile();
-  discardPileThree: DiscardPile = new DiscardPile();
-  discardPileFour: DiscardPile = new DiscardPile();
   discardGroup: PileGroup = new PileGroup();
 
   constructor(
     private _name: string,
     private _game: Game
   ){
-    this.discardGroup.add(this.discardPileOne);
-    this.discardGroup.add(this.discardPileOne);
-    this.discardGroup.add(this.discardPileOne);
-    this.discardGroup.add(this.discardPileOne);
+    this.discardGroup.add(new DiscardPile());
+    this.discardGroup.add(new DiscardPile());
+    this.discardGroup.add(new DiscardPile());
+    this.discardGroup.add(new DiscardPile());
 
     this.reset();
   }

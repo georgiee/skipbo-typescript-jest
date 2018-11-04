@@ -14,19 +14,15 @@ export class Game {
   // hold all completed building cards
   completedDeck: Card[] = [];
   buildingGroup: PileGroup = new PileGroup();
-  buildingPileOne: BuildingPile = new BuildingPile();
-  buildingPileTwo: BuildingPile = new BuildingPile();
-  buildingPileThree: BuildingPile = new BuildingPile();
-  buildingPileFour: BuildingPile = new BuildingPile();
   
   _currentPlayer: DoublyLinkedListNode<Player>;
   _players: DoublyLinkedList<Player> = new DoublyLinkedList();
 
   constructor(deck:Card[] = []) {
-    this.buildingGroup.add(this.buildingPileOne);
-    this.buildingGroup.add(this.buildingPileTwo);
-    this.buildingGroup.add(this.buildingPileThree);
-    this.buildingGroup.add(this.buildingPileFour);
+    this.buildingGroup.add(new BuildingPile());
+    this.buildingGroup.add(new BuildingPile());
+    this.buildingGroup.add(new BuildingPile());
+    this.buildingGroup.add(new BuildingPile());
 
     if(deck) {
       this.deck.fromArray(deck);
@@ -88,7 +84,7 @@ export class Game {
   createPlayer(name: string) {
     const player = new Player(name, this);
     this._players.add(player);
-    logger.info(`New Player '${player}' Added`);
+    logger.info(`New Player '${player}' Added`, player);
 
     return player;
   }

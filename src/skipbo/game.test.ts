@@ -1,12 +1,12 @@
 import { Game } from "./game";
 import { Player } from "./player";
 import { Card } from "./card";
-import { testdeck } from "./testdeck";
+import { getFullTestDeck } from "./test/testdeck";
 let game: Game;
 
 
 beforeEach(() => {
-  game = new Game(testdeck);
+  game = new Game(getFullTestDeck());
 })
 
 test("can add players", () => {
@@ -27,6 +27,7 @@ test("deal stock cards", () => {
 test("draws cards from deck", () => {
   const count = 5;
   const cards:Card[] = game.drawDeckCards(count);
+  
 
   expect(cards)
   .toEqual(expect.arrayContaining([Card.Five, Card.Ten, Card.SkipBo, Card.Ten, Card.Ten]));
