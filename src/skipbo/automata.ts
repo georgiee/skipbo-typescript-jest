@@ -8,11 +8,11 @@ import { Card } from "./card";
 
 export class Automata {
   private _gameOver = false;
+  private _partialRunCounter = 0;
 
   constructor(
-    private game: Game,
-    private players: Player[])
-    { }
+    private game: Game
+  ){}
 
   tryStockCard() {
     const player = this.currentPlayer;
@@ -69,7 +69,7 @@ export class Automata {
 
   singleRun() {
     const player = this.currentPlayer;
-    logger.group(`-- Run partial turn`);
+    logger.group(`Run partial turn #${this._partialRunCounter++}`);
     logger.info('Hand Cards:', player.getHandCards());
     
     logger.group(`Current Stock Card: ${player.currentStockCard} (${player.getStockCards().length} remaining)`)
@@ -110,6 +110,7 @@ export class Automata {
   }
   
   playTurn() {
+    this._partialRunCounter = 0;
     const player: Player = this.game.nextPlayer();
   
     logger.groupCollapsed(`Playing Turn for ${player} round #${this.game.turnId}`);
@@ -152,7 +153,9 @@ export class Automata {
   }
   
   run(){
-    for(let i = 0; i< 100 && this._gameOver !== true; i++) {
+    this.game.dealStockCards();
+
+    while(!this._gameOver) {
       this.playTurn();
     }
   }

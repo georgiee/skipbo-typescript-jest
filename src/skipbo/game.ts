@@ -5,12 +5,14 @@ import { shuffle, assert } from "../utils";
 import { Player } from "./player";
 import { PileGroup } from "./pile/pile-group";
 import { logger } from "./logger";
+import { Deck } from "./deck";
 
 export const STOCK_CARD_COUNT = 30;
 
 // create and shuffle the initial deck
 export class Game {
-  deck: DoublyLinkedList<Card> = new DoublyLinkedList();
+  _deck: Deck;
+
   // hold all completed building cards
   completedDeck: Card[] = [];
   buildingGroup: PileGroup = new PileGroup();
@@ -19,52 +21,41 @@ export class Game {
   _players: DoublyLinkedList<Player> = new DoublyLinkedList();
   _turnCounter:number = 0;
 
-  constructor(deck:Card[] = []) {
+  constructor(cards: Card[] = null) {
+    this._deck = new Deck(cards || generateSkipBoCards());
+    // this._deck.shuffle();
     this.buildingGroup.add(new BuildingPile());
     this.buildingGroup.add(new BuildingPile());
     this.buildingGroup.add(new BuildingPile());
     this.buildingGroup.add(new BuildingPile());
-
-    if(deck) {
-      this.deck.fromArray(deck);
-    }
-  }
-
-  restart() {
-    this.deck.fromArray(shuffle(generateSkipBoCards()));
   }
   
+  get deck () {
+    return this._deck;
+  }
+
   getDeckCards():Card[] {
-    return Array.from(this.deck.values());
+    return this._deck.getDeckCards();
   }
 
   resetDeck() {
-    const allCards = this.completedDeck.concat(...this.deck.values());
-    this.deck.fromArray(shuffle(allCards));
+    logger.info('Deck is completed, shuffle back in completed cars', this.completedDeck);
+    
+    // add back cards from the completed deck and shuffle
+    this._deck.addCards(...this.completedDeck);
+    this._deck.shuffle();
   }
   
   canDraw(count: number): boolean {
-    return count <= this.deck.size();
+    return this._deck.canDraw(count);
   }
   
   drawDeckCards(count: number):Card[] {
-    assert(count > 0, "Can't draw less than one card");
-    assert(count <= this.deck.size(), `Deck not big enough (${this.deck.size()}), can\'t draw (${count}) card`);
-    
-    let cards = [];
-
-    while(cards.length < count) {
-      
-      cards.push(this.drawDeckCard());
-    }
-    
-    return cards;
+    return this._deck.drawDeckCards(count);
   }
   
   drawDeckCard(): Card {
-    const card = this.deck.pop();
-    
-    return card;
+    return this._deck.drawDeckCard();;
   }
 
   dealStockCards() {
