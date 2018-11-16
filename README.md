@@ -1,4 +1,8 @@
-# Skip Bo in JS
+I integrated this work into an Angular implementation: https://github.com/georgiee/skipbo-angular
+
+---
+
+# SkipBo in Typescript
 
 Start with `npm run develop` and you see the following output:
 ![t](docs/log-example.png)
